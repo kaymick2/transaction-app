@@ -64,9 +64,14 @@ let refreshTransactions = () => {
     .map((x) => {
       return (transactions.innerHTML += `
         <div id="transaction-${x.id}">
-          <span class="fw-bold fs-4">${x.title}</span>
-          <pre class="text-secondary ps-3">${x.description}</pre>
-  
+          <span class="fw-bold fs-4">${x.date}</span>
+          <pre class="text-secondary ps-3">${x.whoTrans}</pre>
+          <pre class="text-secondary ps-3">${x.payWho}</pre>
+          <pre class="text-secondary ps-3">$${x.transAmount}</pre>
+          <pre class="text-secondary ps-3">${x.transType}</pre>
+          <pre class="text-secondary ps-3">${x.paid}</pre>
+          <pre class="text-secondary ps-3">${x.forWhat}</pre>
+          <pre class="text-secondary ps-3">${x.confNum}</pre>  
           <span class="options">
             <i onClick="tryEditTransaction(${x.id})" data-bs-toggle="modal" data-bs-target="#modal-edit" class="fas fa-edit"></i>
             <i onClick="deleteTransaction(${x.id})" class="fas fa-trash-alt"></i>
@@ -81,8 +86,6 @@ let tryEditTransaction = (id) => {
   const transaction = data.find((x) => x.id === id);
   selectedTransaction = transaction;
   transactionID.innerText = transaction.id;
-  titleEditInput.value = transaction.title;
-  descEditInput.value = transaction.description;
   dateEditInput.value=transaction.date;
   whoTransactedEditInput.value=transaction.whoTrans;
   payWhoEditInput.value=transaction.payWho;

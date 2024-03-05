@@ -15,9 +15,18 @@ async def add_transaction(transaction: transactReq) -> dict:
     max_id += 1  # auto increment ID
 #somethign tells me line 17 is gonna be wrong but thats just me.
 #you might need to have the var names match the transaction class attributes
-    newTransaction = Transaction(id=max_id, date=transaction.date, whofor=transaction.whoTrans, whosPaid=transaction.whoTrans, amount=transaction.transAmount, tType=transaction.transType, payDate=transaction.paid, whatfor=transaction.forWhat, confirmation=transaction.confNum)
+    newTransaction = Transaction(id=max_id, 
+                                 date=transaction.date,
+                                whoTrans=transaction.whoTrans,
+                                  payWho=transaction.whoTrans,
+                                    transAmount=transaction.transAmount,
+                                      transType=transaction.transType,
+                                        paid=transaction.paid,
+                                          forWhat=transaction.forWhat,
+                                            confNum=transaction.confNum
+                                )
     transactionList.append(newTransaction)
-    json_compatible_item_data = transaction_router.model_dump()
+    json_compatible_item_data = newTransaction.model_dump()
     return JSONResponse(json_compatible_item_data, status_code=status.HTTP_201_CREATED)
 
 
@@ -28,7 +37,7 @@ async def obtainTransactions() -> dict:
 
 
 @transaction_router.get("/transactions/{id}")
-async def get_transaction_by_id(id: int = Path(..., title="default")) -> dict:
+async def get_transaction_by_id(id: int = Path(..., date="default")) -> dict:
     for transaction in transactionList:
         if transaction== id:
             return {"Transaction": transaction}
@@ -40,17 +49,17 @@ async def get_transaction_by_id(id: int = Path(..., title="default")) -> dict:
 
 
 @transaction_router.put("/transactions/{id}")
-async def update_transaction(transact: transactReq, id: int) -> dict:
+async def update_transaction(Transaction: transactReq, id: int) -> dict:
     for x in transactionList:
         if x.id == id:
-            x.title = transact.date
-            x.whofor = transact.whoTrans
-            x.whopay= transact.payWho
-            x.amount=transact.transAmount
-            x.ttype=transact.transType
-            x.isPaid=transact.paid
-            x.what=transact.forWhat
-            x.confirmation=transact.confNum
+            x.title = Transaction.date
+            x.whofor = Transaction.whoTrans
+            x.whopay= Transaction.payWho
+            x.amount=Transaction.transAmount
+            x.ttype=Transaction.transType
+            x.isPaid=Transaction.paid
+            x.what=Transaction.forWhat
+            x.confirmation=Transaction.confNum
             return {"Message": "Transaction updated successfully"}
 
     return {"message": f"The transaction with ID={id} was not found."}
