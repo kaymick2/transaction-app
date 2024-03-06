@@ -16,3 +16,4 @@ venv.bak/
 .vscode/*
 
 # Others
+frontend/papaparse.min.js

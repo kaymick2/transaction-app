@@ -4,14 +4,14 @@ body {
   width: 100%;
   margin: 0;
   overflow: hidden;
-  font-family: sans-serif;
-  background-color: #e5e5e5;
+  font-family: "Comic Sans MS";
+  background-color: #f4ccf2;
 }
 
 .app {
   height: 100%;
   width: 500px;
-  display: flex;
+  
   flex-direction: column;
   background-color: #fff;
   border: 0.25rem solid #abcea1;
@@ -29,13 +29,56 @@ body {
   border-radius: 5px;
   cursor: pointer;
 }
-
+.rainbow-button {
+  background: linear-gradient(0deg, red, orange, yellow, green, blue, indigo, violet);
+  text-shadow:2px 2px 5px white;
+  /* Add other button styles (padding, border, etc.) here */
+}
+.grayscale-rainbow-button {
+  background: linear-gradient(
+    90deg,
+    #000,
+    #333,
+    #666,
+    #999,
+    #ccc,
+    #eee,
+    #fff
+  );
+  text-shadow:2px 2px 5px white;
+  /* Add other button styles (padding, border, etc.) here */
+}
+.blue-rainbow-button {
+  background: linear-gradient(
+    90deg,
+    #021B79, /* Dark blue */
+    #0575E6, /* Royal blue */
+    #205E9B  /* Sky blue */
+  );
+  /* Add other button styles (padding, border, etc.) here */
+}
+.red-rainbow-button {
+  background: linear-gradient(
+    90deg,
+    #FF0000, /* Pure red */
+    #FF6347, /* Tomato */
+    #FF4500, /* Orange Red */
+    #CD5C5C, /* Indian Red */
+    #B22222, /* Fire Brick */
+    #8B0000  /* Dark Red */
+  );
+  /* Add other button styles (padding, border, etc.) here */
+}
 .fa-plus {
   background-color: #abcea1;
   padding: 3px;
   border-radius: 3px;
 }
-
+.titel {
+  
+  justify-content: center;
+  align-items: center;
+}
 #todos {
   display: flex;
   flex-direction: column;

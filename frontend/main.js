@@ -1,3 +1,4 @@
+
 let dateInput= document.getElementById('date');
 let whoTransactedInput=document.getElementById('whoTrans');
 let payWhoInput=document.getElementById('payWho');
@@ -49,6 +50,7 @@ let addTransaction = (date, whoTrans, payWho, transAmount, transType, paid, forW
     if (xhr.readyState == 4 && xhr.status == 201) {
       const newTransaction = JSON.parse(xhr.responseText);
       data.push(newTransaction);
+
       refreshTransactions();
     }
   };
@@ -57,31 +59,69 @@ let addTransaction = (date, whoTrans, payWho, transAmount, transType, paid, forW
   xhr.send(JSON.stringify({date, whoTrans, payWho, transAmount, transType, paid, forWhat, confNum}));
 };
 
-let refreshTransactions = () => {
-  transactions.innerHTML = '';
-  data
-    .sort((a, b) => b.id - a.id)
-    .map((x) => {
-      return (transactions.innerHTML += `
-        <div id="transaction-${x.id}">
-          <span class="fw-bold fs-4">${x.date}</span>
-          <pre class="text-secondary ps-3">${x.whoTrans}</pre>
-          <pre class="text-secondary ps-3">${x.payWho}</pre>
-          <pre class="text-secondary ps-3">$${x.transAmount}</pre>
-          <pre class="text-secondary ps-3">${x.transType}</pre>
-          <pre class="text-secondary ps-3">${x.paid}</pre>
-          <pre class="text-secondary ps-3">${x.forWhat}</pre>
-          <pre class="text-secondary ps-3">${x.confNum}</pre>  
-          <span class="options">
-            <i onClick="tryEditTransaction(${x.id})" data-bs-toggle="modal" data-bs-target="#modal-edit" class="fas fa-edit"></i>
-            <i onClick="deleteTransaction(${x.id})" class="fas fa-trash-alt"></i>
-          </span>
-        </div>
-    `);
-    });
+/**
+ * Refreshes the transactions table by populating it with data from the 'data' array.
+ */
 
+var csvContent='';
+let refreshTransactions = () => {
+
+  csvContent=Papa.unparse(data);
+  // Clear the existing content of the 'transactions' table
+  transactions.innerHTML = '';
+  const dates= data.map(z =>z.date)
+    // Sort the transactions by ID in descending order
+  data.sort((a, b) => a.date - b.date);
+
+  // Iterate through each transaction and create a new row in the table
+  data.map((x) => {
+      // Create a new row in the table
+      const row = transactions.insertRow();
+      const link = `<a href="https://${x.forWhat}" target="_blank">LINK</a>`;
+
+      // Populate the row with transaction data
+      row.innerHTML += `
+          <tr>
+              <th scope='row'>${x.id}</th>
+              <td>${x.date}</td>
+              <td>${x.whoTrans}</td>
+              <td>${x.payWho}</td>
+              <td>$${x.transAmount}</td>
+              <td>${x.transType}</td>
+              <td>${x.paid}</td>
+              <td>${link}</td>
+              <td>${x.confNum}</td>
+              <td>
+                  <button
+                      type="button"
+                      class="btn-primary btn blue-rainbow-button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modal-edit"
+                      onclick="tryEditTransaction(${x.id})"
+                  >
+                      Edit
+                  </button>
+              </td>
+              <td>
+                  <button
+                      type="button"
+                      class="btn-primary btn red-rainbow-button"
+                      onclick="deleteTransaction(${x.id})"
+                  >
+                      Delete
+                  </button>
+              </td>
+              <td>N/A</td>
+          </tr>
+      `;
+  });
+
+  // Reset the form input fields
   resetForm();
 };
+function externalRedirect(what){
+  window.location.href=what;
+}
 let tryEditTransaction = (id) => {
   const transaction = data.find((x) => x.id === id);
   selectedTransaction = transaction;
@@ -162,6 +202,28 @@ let resetForm = () => {
 
 };
 
+
+console.log(csvContent);
+const exportButton = document.getElementById('exportbutton');
+exportButton.addEventListener('click', () => {
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  
+  // Create the button element
+  const button = document.createElement('button');
+  button.textContent = 'Download CSV'; // Set the button text
+  button.classList.add('rainbow-button');
+  button.onclick = () => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'transactions.csv';
+    link.click();
+  };
+  
+  // Insert the button at the top of the page (before any other content)
+  const container = document.getElementById('titlebuttoncontainer'); // Replace with your actual container ID
+  container.appendChild(button);
+});
 let getTransactions = () => {
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {

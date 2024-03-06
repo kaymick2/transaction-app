@@ -52,14 +52,14 @@ async def get_transaction_by_id(id: int = Path(..., date="default")) -> dict:
 async def update_transaction(Transaction: transactReq, id: int) -> dict:
     for x in transactionList:
         if x.id == id:
-            x.title = Transaction.date
-            x.whofor = Transaction.whoTrans
-            x.whopay= Transaction.payWho
-            x.amount=Transaction.transAmount
-            x.ttype=Transaction.transType
-            x.isPaid=Transaction.paid
-            x.what=Transaction.forWhat
-            x.confirmation=Transaction.confNum
+            x.date = Transaction.date
+            x.whoTrans = Transaction.whoTrans
+            x.payWho= Transaction.payWho
+            x.transAmount=Transaction.transAmount
+            x.transType=Transaction.transType
+            x.paid=Transaction.paid
+            x.forWhat=Transaction.forWhat
+            x.confNum=Transaction.confNum
             return {"Message": "Transaction updated successfully"}
 
     return {"message": f"The transaction with ID={id} was not found."}
